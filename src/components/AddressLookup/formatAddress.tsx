@@ -1,8 +1,10 @@
 import {Option} from "../Combobox/types";
 import {
-  FindAddressError,
+  AddressError,
   FindAddressResponse,
   FindAddressResult,
+  RetrieveAddressResponse,
+  RetrieveAddressResult,
 } from "./types";
 
 // Cast a string to an Option
@@ -12,12 +14,12 @@ export const optionise = (text: string): Option => ({
   value: text,
 });
 
-export const formatAddress = ({Items}: FindAddressResponse) => {
+export const formatItems = ({Items}: FindAddressResponse) => {
   if (!Items || !Array.isArray(Items)) {
     return [optionise("No address found")];
   }
 
-  if ((Items[0] as FindAddressError).Error) {
+  if ((Items[0] as AddressError).Error) {
     return [optionise(Items[0].Description)];
   }
 
@@ -28,4 +30,25 @@ export const formatAddress = ({Items}: FindAddressResponse) => {
       value: item.Text,
     }),
   );
+};
+
+export const formatUkAddress = ({Items}: RetrieveAddressResponse) => {
+  if (!Items || !Array.isArray(Items)) {
+    return Error("No address found");
+  }
+
+  if ((Items[0] as AddressError).Error) {
+    return Error((Items[0] as AddressError).Description);
+  }
+
+  const {Line1, Line2, City, PostalCode} = (
+    Items as RetrieveAddressResult[]
+  )[0];
+
+  return {
+    address_1: Line1,
+    address_2: Line2,
+    town: City,
+    uk_postcode: PostalCode,
+  };
 };

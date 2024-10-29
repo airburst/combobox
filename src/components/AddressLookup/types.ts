@@ -6,7 +6,7 @@ export type FindAddressResult = {
   Description: string;
 };
 
-export type FindAddressError = {
+export type AddressError = {
   Cause: string;
   Error: string;
   Description: string;
@@ -14,5 +14,19 @@ export type FindAddressError = {
 };
 
 export type FindAddressResponse = {
-  Items: FindAddressResult[] | FindAddressError[];
+  Items: FindAddressResult[] | AddressError[];
+};
+
+export type RetrieveAddressResult = {
+  Id: string;
+  Type: string;
+  City: string;
+  Line1: string;
+  Line2: string;
+  PostalCode: string;
+  Label: string;
+};
+
+export type RetrieveAddressResponse = {
+  Items: RetrieveAddressResult[] | AddressError[];
 };
