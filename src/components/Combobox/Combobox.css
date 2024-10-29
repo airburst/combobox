@@ -4,6 +4,7 @@
   --combobox-list-gap: 4px;
   --combobox-border-color: #ccc;
   --combobox-group-color: white;
+  --combobox-selected-background-color: #dad6f7;
   --combobox-group-background-color: var(--color-primary);
 }
 
@@ -74,7 +75,7 @@
 
   &.focused,
   &:hover {
-    background-color: var(--color-background-highlight);
+    background-color: var(--combobox-selected-background-color);
     border-color: var(--color-primary);
   }
 }

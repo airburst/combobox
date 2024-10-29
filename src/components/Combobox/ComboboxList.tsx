@@ -46,9 +46,9 @@ export const ComboboxList = ({
       }
 
       if (event.code === "Enter") {
-        if (focusId === 0 && options) {
-          const [firstTrade] = options;
-          handleOptionClick(firstTrade);
+        // TODO: Scope to this list; not any others in document
+        if (options) {
+          handleOptionClick(options[focusId]);
         }
       }
     },

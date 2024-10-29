@@ -4,7 +4,6 @@ import "@simplybusiness/theme-core";
 import "./App.css";
 import {AddressLookup} from "./components/AddressLookup/AddressLookup";
 // import {Combobox} from "./components/Combobox/Combobox";
-// import {Options} from "./components/Combobox/types";
 
 // const options: Options = [
 //   {id: "cat", text: "Cat", value: "Cat"},
@@ -19,7 +18,7 @@ import {AddressLookup} from "./components/AddressLookup/AddressLookup";
 //   {id: "falcon", text: "Falcon", value: "Falcon"},
 //   {id: "winged-horse", text: "Winged Horse", value: "Winged Horse"},
 // ];
-// const groupedOptions: Options = [
+// const options: Options = [
 //   {
 //     category: "Land",
 //     options: [
@@ -51,14 +50,14 @@ function App() {
   return (
     <div className="container">
       <Text elementType="h1">Combo Box</Text>
-      <AddressLookup />
       {/* <Combobox
         label="Select an animal"
         options={options}
-        onSelected={console.log}
+        onSelected={(option) => console.log(JSON.stringify(option, null, 2))}
       /> */}
+      <AddressLookup />
       <TextField label="Name" />
-      <TextField label="Address" />
+      <TextField label="Email" />
     </div>
   );
 }
