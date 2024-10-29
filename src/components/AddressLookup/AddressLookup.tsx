@@ -12,6 +12,10 @@ const LIMIT = 10;
 // if Type is not "Address" or "Premise"
 export const AddressLookup = () => {
   const findAddresses = (partialAddress: string): Promise<Option[]> => {
+    if (!partialAddress) {
+      return Promise.resolve([]);
+    }
+
     return fetch(
       `${FIND_URL}?Key=${API_KEY}&Text=${partialAddress}&Limit=${LIMIT}`,
     )

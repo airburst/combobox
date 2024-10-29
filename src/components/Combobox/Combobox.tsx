@@ -38,9 +38,12 @@ export const Combobox = ({
     const searchResults = onChange
       ? await onChange(searchTerm)
       : filterOptions(options!, searchTerm);
+
     setInputValue(searchTerm);
-    setDisplayOptions(searchResults);
-    setExpanded(true);
+    if (searchResults.length) {
+      setDisplayOptions(searchResults);
+      setExpanded(true);
+    }
   };
 
   const hideOptions = () => {
