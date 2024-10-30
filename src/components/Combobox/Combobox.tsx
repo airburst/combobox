@@ -58,25 +58,6 @@ export const Combobox = ({
     }
   };
 
-  const asyncSearch = useCallback(
-    async (searchTerm: string) => {
-      if (onChange) {
-        const searchResults = await onChange(searchTerm);
-
-        if (searchResults.length) {
-          setDisplayOptions(searchResults);
-          setExpanded(true);
-        }
-      }
-    },
-    [onChange],
-  );
-
-  // Debounce asynchronous search
-  useEffect(() => {
-    asyncSearch(debouncedValue);
-  }, [asyncSearch, debouncedValue]);
-
   const hideOptions = () => {
     setExpanded(false);
     // inputRef?.current?.focus();
@@ -96,6 +77,23 @@ export const Combobox = ({
       hideOptions();
     }
   };
+
+  const asyncSearch = useCallback(
+    async (searchTerm: string) => {
+      const searchResults = await onChange?.(searchTerm);
+
+      if (searchResults?.length) {
+        setDisplayOptions(searchResults);
+        setExpanded(true);
+      }
+    },
+    [onChange],
+  );
+
+  // Debounce asynchronous search
+  useEffect(() => {
+    asyncSearch(debouncedValue);
+  }, [asyncSearch, debouncedValue]);
 
   // Hide list on click outside or Escape/Tab key
   useEffect(() => {

@@ -8,9 +8,8 @@ const FIND_URL = `${BASE_URL}/Find/v1.00/json3.ws`;
 const RETRIEVE_URL = `${BASE_URL}/Retrieve/v1.2/json3.ws`;
 const LIMIT = 10;
 
-// TODO: Repeat lookup with Container param
-// if Type is not "Address" or "Premise"
 export const AddressLookup = () => {
+  // onChange action: find addresses
   const findAddresses = (partialAddress: string): Promise<Option[]> => {
     if (!partialAddress) {
       return Promise.resolve([]);
@@ -23,6 +22,10 @@ export const AddressLookup = () => {
       .then((data) => formatItems(data));
   };
 
+  // TODO: Repeat lookup with Container param
+  // if Type is not "Address" or "Premise"
+
+  // onSelected action: retrieve address
   const retrieveAddress = ({id}: Option) => {
     fetch(`${RETRIEVE_URL}?Key=${API_KEY}&Id=${id}`)
       .then((response) => response.json())
@@ -35,7 +38,7 @@ export const AddressLookup = () => {
   return (
     <Combobox
       label="Find address"
-      delay={1000}
+      delay={300}
       onChange={findAddresses}
       onSelected={retrieveAddress}
     />

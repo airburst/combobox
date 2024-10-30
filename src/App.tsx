@@ -50,7 +50,7 @@ import {AddressLookup} from "./components/AddressLookup/AddressLookup";
 function App() {
   return (
     <div className="container">
-      <Text elementType="h1">Combo Box</Text>
+      <Text elementType="h1">Combo Box Demo</Text>
       {/* <Combobox
         label="Select an animal"
         options={options}

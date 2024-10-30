@@ -13,13 +13,11 @@
     "@simplybusiness/mobius": "^5.3.1",
     "@simplybusiness/theme-core": "^7.1.5",
     "clsx": "^2.1.1",
-    "lodash.debounce": "^4.0.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
-    "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
