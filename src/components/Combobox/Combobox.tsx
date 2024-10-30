@@ -1,11 +1,19 @@
 import {TextField} from "@simplybusiness/mobius";
 import clsx from "clsx";
-import {ChangeEvent, FocusEvent, useEffect, useRef, useState} from "react";
+import {
+  ChangeEvent,
+  FocusEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import "./Combobox.css";
 import {ComboboxList} from "./ComboboxList";
 import {ComboboxListGroup} from "./ComboboxListGroup";
 import {filterOptions} from "./helpers";
 import {isOptionGroup, Option, OptionGroup, Options} from "./types";
+import {useDebouncedValue} from "./useDebouncedValue";
 
 export type ComboboxProps = {
   label: string;
@@ -13,6 +21,7 @@ export type ComboboxProps = {
   onSelected?: (option: Option) => void;
   onChange?: (searchTerm: string) => Promise<Options>;
   isFetching?: boolean;
+  delay?: number;
 };
 
 type ShowOptionsEvent =
@@ -24,27 +33,49 @@ export const Combobox = ({
   options,
   onSelected,
   onChange,
+  delay = 0,
 }: ComboboxProps) => {
   const listRef = useRef<HTMLUListElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [displayOptions, setDisplayOptions] = useState(options || []);
   const [inputValue, setInputValue] = useState("");
+  const debouncedValue = useDebouncedValue(inputValue, delay);
   const isGrouped = options && isOptionGroup(options);
+  const isSynchronous = !!options && delay === 0;
 
-  const showOptions = async (e: ShowOptionsEvent) => {
+  const updateInput = async (e: ShowOptionsEvent) => {
     const searchTerm = (e.target as HTMLInputElement).value ?? "";
-    // Default change action is to filter options
-    const searchResults = onChange
-      ? await onChange(searchTerm)
-      : filterOptions(options!, searchTerm);
 
     setInputValue(searchTerm);
-    if (searchResults.length) {
-      setDisplayOptions(searchResults);
-      setExpanded(true);
+    // Default change action is to filter options
+    if (isSynchronous) {
+      const searchResults = filterOptions(options, searchTerm);
+      if (searchResults.length) {
+        setDisplayOptions(searchResults);
+        setExpanded(true);
+      }
     }
   };
+
+  const asyncSearch = useCallback(
+    async (searchTerm: string) => {
+      if (onChange) {
+        const searchResults = await onChange(searchTerm);
+
+        if (searchResults.length) {
+          setDisplayOptions(searchResults);
+          setExpanded(true);
+        }
+      }
+    },
+    [onChange],
+  );
+
+  // Debounce asynchronous search
+  useEffect(() => {
+    asyncSearch(debouncedValue);
+  }, [asyncSearch, debouncedValue]);
 
   const hideOptions = () => {
     setExpanded(false);
@@ -54,7 +85,7 @@ export const Combobox = ({
   // Show options on focus, if supplied as a prop
   const handleFocus = (e: FocusEvent<Element, Element>) => {
     if (options?.length) {
-      showOptions(e);
+      updateInput(e);
     }
   };
 
@@ -107,7 +138,7 @@ export const Combobox = ({
           ref={inputRef}
           label={label}
           value={inputValue}
-          onChange={showOptions}
+          onChange={updateInput}
           onFocus={handleFocus}
         />
       </div>

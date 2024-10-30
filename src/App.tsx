@@ -4,6 +4,7 @@ import "@simplybusiness/theme-core";
 import "./App.css";
 import {AddressLookup} from "./components/AddressLookup/AddressLookup";
 // import {Combobox} from "./components/Combobox/Combobox";
+// import {Options} from "./components/Combobox/types";
 
 // const options: Options = [
 //   {id: "cat", text: "Cat", value: "Cat"},

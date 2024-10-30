@@ -20,9 +20,7 @@ export const AddressLookup = () => {
       `${FIND_URL}?Key=${API_KEY}&Text=${partialAddress}&Limit=${LIMIT}`,
     )
       .then((response) => response.json())
-      .then((data) => {
-        return formatItems(data);
-      });
+      .then((data) => formatItems(data));
   };
 
   const retrieveAddress = ({id}: Option) => {
@@ -37,6 +35,7 @@ export const AddressLookup = () => {
   return (
     <Combobox
       label="Find address"
+      delay={1000}
       onChange={findAddresses}
       onSelected={retrieveAddress}
     />
