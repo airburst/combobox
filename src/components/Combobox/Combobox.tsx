@@ -17,6 +17,7 @@ import {useDebouncedValue} from "./useDebouncedValue";
 
 export type ComboboxProps = {
   label: string;
+  defaultValue?: string;
   options?: Options;
   onSelected?: (option: Option) => void;
   onChange?: (searchTerm: string) => Promise<Options>;
@@ -30,6 +31,7 @@ type ShowOptionsEvent =
 
 export const Combobox = ({
   label,
+  defaultValue = "",
   options,
   onSelected,
   onChange,
@@ -39,7 +41,7 @@ export const Combobox = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [displayOptions, setDisplayOptions] = useState(options || []);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(defaultValue);
   const debouncedValue = useDebouncedValue(inputValue, delay);
   const isGrouped = options && isOptionGroup(options);
   const isSynchronous = !!options && delay === 0;
@@ -92,8 +94,10 @@ export const Combobox = ({
 
   // Debounce asynchronous search
   useEffect(() => {
-    asyncSearch(debouncedValue);
-  }, [asyncSearch, debouncedValue]);
+    if (debouncedValue !== defaultValue) {
+      asyncSearch(debouncedValue);
+    }
+  }, [asyncSearch, debouncedValue, defaultValue]);
 
   // Hide list on click outside or Escape/Tab key
   useEffect(() => {
