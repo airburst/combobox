@@ -1,5 +1,5 @@
 :root {
-  --combobox-max-width: 320px;
+  --combobox-max-width: 562px;
   --combobox-list-height: 18em;
   --combobox-list-gap: 4px;
   --combobox-border-color: #ccc;
@@ -71,7 +71,7 @@
 }
 
 .combobox__listitem {
-  padding: var(--size-xxs);
+  padding: var(--size-xs) var(--size-sm);
 
   &.focused,
   &:hover {

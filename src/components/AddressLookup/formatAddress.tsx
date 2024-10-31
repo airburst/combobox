@@ -1,4 +1,5 @@
 import {Option} from "../Combobox/types";
+import {FIND_URL} from "./AddressLookup";
 import {
   AddressError,
   FindAddressResponse,
@@ -14,6 +15,12 @@ export const optionise = (text: string): Option => ({
   value: text,
 });
 
+// Callback function to expand addresses from a group container
+const expandAddress = (id: string): Promise<Option[]> =>
+  fetch(`${FIND_URL}&Container=${id}`)
+    .then((response) => response.json())
+    .then((data) => formatItems(data));
+
 export const formatItems = ({Items}: FindAddressResponse) => {
   if (!Items || !Array.isArray(Items)) {
     return [optionise("No address found")];
@@ -28,6 +35,10 @@ export const formatItems = ({Items}: FindAddressResponse) => {
       id: item.Id,
       text: `${item.Text}, ${item.Description}`,
       value: item.Text,
+      // Add a callback to trigger secondary search
+      // if the address type is not "Address"
+      callback:
+        item.Type === "Address" ? undefined : () => expandAddress(item.Id),
     }),
   );
 };

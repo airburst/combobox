@@ -1,8 +1,8 @@
 import {TextField} from "@simplybusiness/mobius";
 import clsx from "clsx";
 import {
-  ChangeEvent,
   FocusEvent,
+  MouseEvent,
   useCallback,
   useEffect,
   useRef,
@@ -12,22 +12,14 @@ import "./Combobox.css";
 import {ComboboxList} from "./ComboboxList";
 import {ComboboxListGroup} from "./ComboboxListGroup";
 import {filterOptions} from "./helpers";
-import {isOptionGroup, Option, OptionGroup, Options} from "./types";
+import {
+  ComboboxProps,
+  isOptionGroup,
+  Option,
+  OptionGroup,
+  ShowOptionsEvent,
+} from "./types";
 import {useDebouncedValue} from "./useDebouncedValue";
-
-export type ComboboxProps = {
-  label: string;
-  defaultValue?: string;
-  options?: Options;
-  onSelected?: (option: Option) => void;
-  onChange?: (searchTerm: string) => Promise<Options>;
-  isFetching?: boolean;
-  delay?: number;
-};
-
-type ShowOptionsEvent =
-  | ChangeEvent<HTMLInputElement>
-  | FocusEvent<Element, Element>;
 
 export const Combobox = ({
   label,
@@ -62,6 +54,7 @@ export const Combobox = ({
 
   const hideOptions = () => {
     setExpanded(false);
+    // TODO: set a flag to prevent showing options after input change
     // inputRef?.current?.focus();
   };
 
@@ -72,8 +65,13 @@ export const Combobox = ({
     }
   };
 
-  const handleSelected = (option: Option) => {
-    if (option) {
+  const handleSelected = async (option: Option) => {
+    if (option.callback) {
+      // Handle a repeat search or drill down
+      const options = await option.callback();
+
+      setDisplayOptions(options);
+    } else {
       onSelected?.(option);
       setInputValue(option.text);
       hideOptions();
@@ -116,11 +114,13 @@ export const Combobox = ({
     };
 
     document.addEventListener("keydown", keyListener);
+    // @ts-expect-error event type
     document.addEventListener("mousedown", tapListener);
     document.addEventListener("touchstart", tapListener);
 
     return () => {
       document.removeEventListener("keydown", keyListener);
+      // @ts-expect-error event type
       document.removeEventListener("mousedown", tapListener);
       document.removeEventListener("touchstart", tapListener);
     };

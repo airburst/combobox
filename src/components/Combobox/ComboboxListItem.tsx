@@ -10,11 +10,12 @@ export const ComboboxListItem = ({
   id,
   text,
   value,
+  callback,
   focused,
   onSelected,
 }: ComboboxListItemProps) => {
   const handleSelected = () => {
-    onSelected?.({id, text, value});
+    onSelected?.({id, text, value, callback});
   };
 
   const classes = clsx("combobox__listitem", {focused});
