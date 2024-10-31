@@ -4,7 +4,7 @@ export type Option = {
   id: string;
   text: string;
   value: string | number | boolean;
-  callback?: () => Promise<Options>;
+  callback?: () => Promise<AsyncResponse>;
 };
 
 export type OptionGroup = {
@@ -13,6 +13,11 @@ export type OptionGroup = {
 };
 
 export type Options = Option[] | OptionGroup[];
+
+export type AsyncResponse = {
+  error?: Error;
+  options?: Options;
+};
 
 export const isOptionGroup = (options: Options): options is OptionGroup[] => {
   return (options as OptionGroup[])[0].options !== undefined;
@@ -23,7 +28,7 @@ export type ComboboxProps = {
   defaultValue?: string;
   options?: Options;
   onSelected?: (selection: Option) => void;
-  onChange?: (searchTerm: string) => Promise<Options>;
+  onChange?: (searchTerm: string) => Promise<AsyncResponse>;
   isFetching?: boolean;
   delay?: number;
 };

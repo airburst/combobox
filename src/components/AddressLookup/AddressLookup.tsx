@@ -1,5 +1,5 @@
 import {Combobox} from "../Combobox/Combobox";
-import {Option} from "../Combobox/types";
+import {AsyncResponse, Option} from "../Combobox/types";
 import {formatItems, formatUkAddress} from "./formatAddress";
 
 const API_KEY = import.meta.env.API_KEY;
@@ -10,9 +10,9 @@ const LIMIT = 10;
 
 export const AddressLookup = () => {
   // onChange action: find addresses
-  const findAddresses = (partialAddress: string): Promise<Option[]> => {
+  const findAddresses = (partialAddress: string): Promise<AsyncResponse> => {
     if (!partialAddress) {
-      return Promise.resolve([]);
+      return Promise.resolve({error: new Error("No search term provided")});
     }
 
     return fetch(`${FIND_URL}&Text=${partialAddress}&Limit=${LIMIT}`)

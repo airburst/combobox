@@ -34,6 +34,9 @@ export const Combobox = ({
   const [expanded, setExpanded] = useState(false);
   const [displayOptions, setDisplayOptions] = useState(options || []);
   const [inputValue, setInputValue] = useState(defaultValue);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
   const debouncedValue = useDebouncedValue(inputValue, delay);
   const isGrouped = options && isOptionGroup(options);
   const isSynchronous = !!options && delay === 0;
@@ -68,9 +71,14 @@ export const Combobox = ({
   const handleSelected = async (option: Option) => {
     if (option.callback) {
       // Handle a repeat search or drill down
-      const options = await option.callback();
+      const {error, options} = await option.callback();
 
-      setDisplayOptions(options);
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+
+      setDisplayOptions(options!);
     } else {
       onSelected?.(option);
       setInputValue(option.text);
@@ -80,11 +88,18 @@ export const Combobox = ({
 
   const asyncSearch = useCallback(
     async (searchTerm: string) => {
-      const searchResults = await onChange?.(searchTerm);
+      if (onChange) {
+        const {error, options} = await onChange(searchTerm);
 
-      if (searchResults?.length) {
-        setDisplayOptions(searchResults);
-        setExpanded(true);
+        if (error) {
+          setErrorMessage(error.message);
+          return;
+        }
+
+        if (options?.length) {
+          setDisplayOptions(options);
+          setExpanded(true);
+        }
       }
     },
     [onChange],
@@ -142,6 +157,7 @@ export const Combobox = ({
           value={inputValue}
           onChange={updateInput}
           onFocus={handleFocus}
+          errorMessage={errorMessage}
         />
       </div>
       <div

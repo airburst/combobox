@@ -1,4 +1,4 @@
-import {Option} from "../Combobox/types";
+import {AsyncResponse, Option} from "../Combobox/types";
 import {FIND_URL} from "./AddressLookup";
 import {
   AddressError,
@@ -16,31 +16,39 @@ export const optionise = (text: string): Option => ({
 });
 
 // Callback function to expand addresses from a group container
-const expandAddress = (id: string): Promise<Option[]> =>
+const expandAddress = (id: string): Promise<AsyncResponse> =>
   fetch(`${FIND_URL}&Container=${id}`)
     .then((response) => response.json())
     .then((data) => formatItems(data));
 
-export const formatItems = ({Items}: FindAddressResponse) => {
+const formatError = (message: string) => ({
+  error: new Error(message),
+});
+
+export const formatItems = ({Items}: FindAddressResponse): AsyncResponse => {
   if (!Items || !Array.isArray(Items)) {
-    return [optionise("No address found")];
+    return formatError("No address found");
   }
 
   if ((Items[0] as AddressError).Error) {
-    return [optionise(Items[0].Description)];
+    console.error(Items[0]);
+
+    return formatError(Items[0].Description);
   }
 
-  return (Items as FindAddressResult[]).map(
-    (item): Option => ({
-      id: item.Id,
-      text: `${item.Text}, ${item.Description}`,
-      value: item.Text,
-      // Add a callback to trigger secondary search
-      // if the address type is not "Address"
-      callback:
-        item.Type === "Address" ? undefined : () => expandAddress(item.Id),
-    }),
-  );
+  return {
+    options: (Items as FindAddressResult[]).map(
+      (item): Option => ({
+        id: item.Id,
+        text: `${item.Text}, ${item.Description}`,
+        value: item.Text,
+        // Add a callback to trigger secondary search
+        // if the address type is not "Address"
+        callback:
+          item.Type === "Address" ? undefined : () => expandAddress(item.Id),
+      }),
+    ),
+  };
 };
 
 export const formatUkAddress = ({Items}: RetrieveAddressResponse) => {
