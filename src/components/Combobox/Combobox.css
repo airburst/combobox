@@ -89,6 +89,7 @@
 [role="group"] > [role="presentation"] {
   display: block;
   margin: 0;
+  padding: 0 var(--size-sm);
   font-weight: bold;
   line-height: 2;
   color: var(--combobox-group-color);
