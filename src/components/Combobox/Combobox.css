@@ -46,9 +46,8 @@
   box-shadow: 0 0 #000, 0 1px 2px 0 rgba(0, 0, 0, 0.05),
     0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
-  overflow: hidden;
-  /* &::-webkit-scrollbar {
-    width: 4px;
+  &::-webkit-scrollbar {
+    width: 9px;
   }
 
   &::-webkit-scrollbar-track {
@@ -56,9 +55,9 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--color-primary);
-    outline: 1px solid var(--color-background-light);
-  } */
+    background-color: var(--color-primary-light);
+    border-radius: 2px;
+  }
 
   &.expanded {
     visibility: visible;
