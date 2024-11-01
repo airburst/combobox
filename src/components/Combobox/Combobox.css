@@ -46,8 +46,7 @@
   border-radius: var(--radius-1);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
     rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-  transition: box-shadow 0.3s ease, height 0.3s ease, opacity 0.3s ease,
-    content-visibility 0.3s ease;
+  transition: box-shadow 0.3s ease, height 0.2s ease, opacity 0.3s ease;
   transition-behavior: allow-discrete;
   z-index: 10;
 
