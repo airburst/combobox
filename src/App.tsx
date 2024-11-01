@@ -1,24 +1,24 @@
-import {Text, TextField} from "@simplybusiness/mobius";
+import {Text} from "@simplybusiness/mobius";
 // @ts-expect-error theme import
 import "@simplybusiness/theme-core";
 import "./App.css";
-import {AddressLookup} from "./components/AddressLookup/AddressLookup";
-// import {Combobox} from "./components/Combobox/Combobox";
-// import {Options} from "./components/Combobox/types";
+// import {AddressLookup} from "./components/AddressLookup/AddressLookup";
+import {Combobox} from "./components/Combobox/Combobox";
+import {Options} from "./components/Combobox/types";
 
-// const options: Options = [
-//   {id: "cat", text: "Cat", value: "Cat"},
-//   {id: "dog", text: "Dog", value: "Dog"},
-//   {id: "tiger", text: "Tiger", value: "Tiger"},
-//   {id: "reindeer", text: "Reindeer", value: "Reindeer"},
-//   {id: "raccoon", text: "Raccoon", value: "Raccoon"},
-//   {id: "sloth", text: "Sloth", value: "Sloth"},
-//   {id: "dolphin", text: "Dolphin", value: "Dolphin"},
-//   {id: "flounder", text: "Flounder", value: "Flounder"},
-//   {id: "eel", text: "Eel", value: "Eel"},
-//   {id: "falcon", text: "Falcon", value: "Falcon"},
-//   {id: "winged-horse", text: "Winged Horse", value: "Winged Horse"},
-// ];
+const options: Options = [
+  {id: "cat", text: "Cat", value: "Cat"},
+  {id: "dog", text: "Dog", value: "Dog"},
+  {id: "tiger", text: "Tiger", value: "Tiger"},
+  {id: "reindeer", text: "Reindeer", value: "Reindeer"},
+  {id: "raccoon", text: "Raccoon", value: "Raccoon"},
+  {id: "sloth", text: "Sloth", value: "Sloth"},
+  {id: "dolphin", text: "Dolphin", value: "Dolphin"},
+  {id: "flounder", text: "Flounder", value: "Flounder"},
+  {id: "eel", text: "Eel", value: "Eel"},
+  {id: "falcon", text: "Falcon", value: "Falcon"},
+  {id: "winged-horse", text: "Winged Horse", value: "Winged Horse"},
+];
 // const options: Options = [
 //   {
 //     category: "Land",
@@ -51,14 +51,12 @@ function App() {
   return (
     <div className="container">
       <Text elementType="h1">Combo Box Demo</Text>
-      {/* <Combobox
+      <Combobox
         label="Select an animal"
         options={options}
         onSelected={(option) => console.log(JSON.stringify(option, null, 2))}
-      /> */}
-      <AddressLookup />
-      <TextField label="Name" />
-      <TextField label="Email" />
+      />
+      {/* <AddressLookup /> */}
     </div>
   );
 }
