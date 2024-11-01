@@ -1,4 +1,5 @@
 :root {
+  interpolate-size: allow-keywords;
   --combobox-max-width: 562px;
   --combobox-list-height: 18em;
   --combobox-list-gap: 4px;
@@ -40,13 +41,19 @@
   border: var(--border-default);
   background: white;
   overflow-y: auto;
-  visibility: hidden;
+  opacity: 0;
+  height: 0;
   border-radius: var(--radius-1);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
     rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  transition: box-shadow 0.3s ease, height 0.3s ease, opacity 0.3s ease,
+    content-visibility 0.3s ease;
+  transition-behavior: allow-discrete;
+  z-index: 10;
 
   &.expanded {
-    visibility: visible;
+    opacity: 1;
+    height: auto;
   }
 
   & + *,
